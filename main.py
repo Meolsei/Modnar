@@ -1,4 +1,4 @@
-#Import
+#Imports
 import os
 import os
 from aiohttp import ClientConnectorError, ClientResponseError
