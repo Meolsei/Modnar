@@ -9,9 +9,7 @@ import asyncio
 import time
 
 #Bot Config
-intents = discord.Intents(messages=True, guilds=True)
-intents.typing = True
-intents.presences = True
+intents = discord.Intents.all()
 bot = commands.Bot(commands.when_mentioned_or('>'), owners=['769723790078640168'], status=discord.Status.idle, help_command=None, intents = intents)
 
 #Cogs
