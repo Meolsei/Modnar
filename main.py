@@ -33,7 +33,7 @@ async def on_connect():
 async def on_ready():
     print(f"{bot.user.name}#{bot.user.discriminator} loaded.")
 
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Black Ops 2"))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Work in Progress!"))
 
     
 @bot.command(aliases = ['ping', 'ms'])
