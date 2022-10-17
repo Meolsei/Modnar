@@ -1,47 +1,25 @@
-#Imports
 import os
-import os
-from aiohttp import ClientConnectorError, ClientResponseError
 import discord
 from discord.ext import commands
 import sys
-import asyncio
-import time
 
-#Bot Config
 intents = discord.Intents.all()
 bot = commands.Bot(commands.when_mentioned_or('>'), owners=['769723790078640168'], status=discord.Status.idle, help_command=None, intents = intents)
 
-#Cogs
-path="./cogs"
-print("Loading cogs...")
-for file in os.listdir(path):
-    if file.endswith(".py"):
-        l = len(file)
-        bot.load_extension(f'cogs.{file[:l-3]}')
-        print(f"Loaded cogs.{file[:l-3]}.")
+async def loadExt():
+    print("Loading all available cogs...")
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await bot.load_extension(f"cogs.{filename[:-3]}")
+            print(f"Loaded cog ({filename})")
+        else:
+            skipped = []
+            skipped.append(filename)
+            print(f"{len(skipped)} file(s) skipped.")
 
-
-#Events
 @bot.event
 async def on_connect():
-    print("Connected, wait.")
-
-@bot.event
-async def on_ready():
-    print(f"{bot.user.name}#{bot.user.discriminator} loaded.")
-
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Work in Progress!"))
-
-    
-@bot.command(aliases = ['ping', 'ms'])
-async def latency(ctx):
-        time_1 = time.perf_counter()
-        await ctx.trigger_typing()
-        time_2 = time.perf_counter()
-        ping = round((time_2-time_1)*1000)
-        await asyncio.sleep(2.5)
-        await ctx.send(f"Latency: `{ping} ms`.")
+    await loadExt()
     
 try:
     bot.run('OTQ5ODgwMTE4MjI5MjE3Mjgw.GYuSoD.Omre515X2pT7cx4_i_wvhVFv06OupgBka9rZuk')
