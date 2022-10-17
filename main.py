@@ -2,6 +2,10 @@ import os
 import discord
 from discord.ext import commands
 import sys
+from dotenv import load_dotenv
+load_dotenv()
+
+token = os.getenv('TOKEN')
 
 intents = discord.Intents.all()
 bot = commands.Bot(commands.when_mentioned_or('>'), owners=['769723790078640168'], status=discord.Status.idle, help_command=None, intents = intents)
@@ -22,7 +26,7 @@ async def on_connect():
     await loadExt()
     
 try:
-    bot.run('OTQ5ODgwMTE4MjI5MjE3Mjgw.GYuSoD.Omre515X2pT7cx4_i_wvhVFv06OupgBka9rZuk')
+    bot.run(token)
 except ClientConnectorError or ClientResponseError:
     print("Unable to connect to Discord...\nMae, please let me show information...")
     sys.exit()
