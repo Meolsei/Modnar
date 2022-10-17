@@ -46,7 +46,7 @@ async def latency(ctx):
         await ctx.send(f"Latency: `{ping} ms`.")
     
 try:
-    bot.run('OTQ5ODgwMTE4MjI5MjE3Mjgw.YiQyzA.Ly4VlItHYGD21CsboC_na_ilBxg')
+    bot.run('OTQ5ODgwMTE4MjI5MjE3Mjgw.GYuSoD.Omre515X2pT7cx4_i_wvhVFv06OupgBka9rZuk')
 except ClientConnectorError or ClientResponseError:
     print("Unable to connect to Discord...\nMae, please let me show information...")
     sys.exit()
