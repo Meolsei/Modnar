@@ -7,39 +7,62 @@ class Misc(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def age(self, ctx, birth):
-        """Gives the user the 18+ role if applicable. Can remove the role if the user already has it.
-        The format is YYYY-mm-dd. Example: 2000-12-23"""
+    async def age(self, ctx, *args, **kwargs):
+        def check(message):
+            return message.author == ctx.author
 
         role = ctx.guild.get_role(807955779113451522)
-        born = birth
-        dob = datetime.datetime.strptime(born, '%Y-%m-%d')
         today = datetime.date.today()
-        age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
-        
-        if age <18:
-            await ctx.send(f"Role cannot be given, your age is {age}.")
 
-            log = ctx.guild.get_channel(1033132183600246875)
-            await log.send(f"{ctx.author.mention} is under {age} and attempted to use `>age` command.\nMessage located in <#{ctx.message.channel.id}>")
+        if role not in ctx.author.roles:
+            await ctx.reply("Firstly, send the year of birth. Do not execute the command while doing so.")
+            message = await self.bot.wait_for("message", check=check)
+            if isinstance(int(message.content), int):
+                year = message.content
+            else:
+                return CommandInvokeError
+
+            await ctx.reply("Now, send the birth month. Use the number, not the name.")
+            message = await self.bot.wait_for("message", check=check)
+            if isinstance(int(message.content), int):
+                month = message.content
+            else:
+                return CommandInvokeError
+
+            await ctx.reply("Lastly, send your birth day. After that, I'll do the rest of the work.")
+            message = await self.bot.wait_for("message", check=check)
+            if isinstance(int(message.content), int):
+                day = message.content
+            else:
+                return CommandInvokeError
+
+            birth = (f"{year}-{month}-{day}")
+            dob = datetime.datetime.strptime(birth, '%Y-%m-%d')
+            age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+            await ctx.reply(f"Your age is {age}, right? Please type \"Yes\" or \"No.\"")
+            message = await self.bot.wait_for("message", check=check)
+            if message.content == "Yes":
+                await ctx.reply("Okay, giving you the role.")
+                await message.author.add_roles(role)
+            elif message.content == "No":
+                await ctx.reply("Okay, please rerun the command then.")
         else:
-            await ctx.message.author.add_roles(role)
-            await ctx.send(f"Role given!")
-
-        
+            await ctx.reply("You already have the role, would you like to remove it? Please type \"Yes\" or \"No.\"")
+            message = await self.bot.wait_for("message", check=check)
+            if message.content == "Yes":
+                await ctx.reply("Okay, removing the role.")
+                await message.author.remove_roles(role)
+            elif message.content == "No":
+                await ctx.reply("Okay, have a good day then.")
 
     @age.error
     async def age_handle(self, ctx, error):
-        role = ctx.guild.get_role(807955779113451522)
-
         if isinstance(error, commands.CommandInvokeError):
-            await ctx.send("Invalid format provided. `YYYY-mm-dd`, or `2004-02-24` for example.")
-        elif isinstance(error, commands.MissingRequiredArgument):
-            if role in ctx.message.author.roles:
-                await ctx.message.author.remove_roles(role)
-                await ctx.send("Role removed!")
+            await ctx.reply("Invalid response, please rerun the command.")
         else:
             raise error
+                
 
 async def setup(bot):
     await bot.add_cog(Misc(bot))
