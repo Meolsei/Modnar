@@ -19,9 +19,14 @@ class Misc(commands.Cog):
         
         if age <18:
             await ctx.send(f"Role cannot be given, your age is {age}.")
+
+            log = ctx.guild.get_channel(1033132183600246875)
+            await log.send(f"{ctx.author.mention} is under {age} and attempted to use `>age` command.\nMessage located in <#{ctx.message.channel.id}>")
         else:
-                await ctx.message.author.add_roles(role)
-                await ctx.send(f"Role given!")
+            await ctx.message.author.add_roles(role)
+            await ctx.send(f"Role given!")
+
+        
 
     @age.error
     async def age_handle(self, ctx, error):
@@ -33,8 +38,6 @@ class Misc(commands.Cog):
             if role in ctx.message.author.roles:
                 await ctx.message.author.remove_roles(role)
                 await ctx.send("Role removed!")
-            else:
-                await ctx.send("No date provided. `YYYY-mm-dd`, or `2004-02-24` for example.")
         else:
             raise error
 
