@@ -28,5 +28,5 @@ async def on_connect():
 try:
     bot.run(token)
 except ClientConnectorError or ClientResponseError:
-    print("Unable to connect to Discord...\nMae, please let me show information...")
+    print("Unable to connect to Discord...")
     sys.exit()

@@ -42,18 +42,18 @@ class Misc(commands.Cog):
 
             await ctx.reply(f"Your age is {age}, right? Please type \"Yes\" or \"No.\"")
             message = await self.bot.wait_for("message", check=check)
-            if message.content == "Yes":
+            if message.content == "Yes" or "yes":
                 await ctx.reply("Okay, giving you the role.")
                 await message.author.add_roles(role)
-            elif message.content == "No":
+            elif message.content == "No" or "no":
                 await ctx.reply("Okay, please rerun the command then.")
         else:
             await ctx.reply("You already have the role, would you like to remove it? Please type \"Yes\" or \"No.\"")
             message = await self.bot.wait_for("message", check=check)
-            if message.content == "Yes":
+            if message.content == "Yes" or "yes":
                 await ctx.reply("Okay, removing the role.")
                 await message.author.remove_roles(role)
-            elif message.content == "No":
+            elif message.content == "No" or "no":
                 await ctx.reply("Okay, have a good day then.")
 
     @age.error
